@@ -1,0 +1,30 @@
+package com.xavier.api.domain.event;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.xml.crypto.Data;
+import java.util.UUID;
+
+@Table  (name = "event")
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Event {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private UUID id;
+
+    private String title;
+    private String description;
+    private String imgUrl;
+    private String eventDate;
+    private Boolean remote;
+    private Data data;
+}

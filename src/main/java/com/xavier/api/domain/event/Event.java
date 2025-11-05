@@ -18,13 +18,13 @@ import java.util.UUID;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;
 
     private String title;
     private String description;
     private String imgUrl;
-    private String eventDate;
+    private String eventUrl;
     private Boolean remote;
     private Date data;
 }

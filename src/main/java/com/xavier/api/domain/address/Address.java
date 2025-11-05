@@ -2,12 +2,21 @@ package com.xavier.api.domain.address;
 
 import com.xavier.api.domain.event.Event;
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 import java.util.UUID;
 
-@Table(name = "address")
 @Entity
+@Table(name = "address")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class Address {
     @Id
     @GeneratedValue

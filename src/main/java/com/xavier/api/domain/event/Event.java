@@ -1,12 +1,12 @@
 package com.xavier.api.domain.event;
-
+import java.util.Date;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.xml.crypto.Data;
+
 import java.util.UUID;
 
 @Table  (name = "event")
@@ -26,5 +26,5 @@ public class Event {
     private String imgUrl;
     private String eventDate;
     private Boolean remote;
-    private Data data;
+    private Date data;
 }

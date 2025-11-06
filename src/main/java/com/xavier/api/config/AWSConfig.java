@@ -1,5 +1,6 @@
 package com.xavier.api.config;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,9 @@ public class AWSConfig {
 
     @Bean
     public AmazonS3 createS3Client() {
-        return AmazonS3ClientBuilder.standard()
+        return AmazonS3ClientBuilder
+                .standard()
+                .withCredentials(new DefaultAWSCredentialsProviderChain())
                 .withRegion(awsRegion)
                 .build();
     }

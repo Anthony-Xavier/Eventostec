@@ -1,4 +1,4 @@
-package com.xavier.api.domain.cupon;
+package com.xavier.api.domain.coupon;
 
 import com.xavier.api.domain.event.Event;
 import jakarta.persistence.*;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cupon {
+public class Coupon {
     @Id
     @GeneratedValue
     private UUID id;
@@ -25,7 +25,7 @@ public class Cupon {
 
     private Integer discount;
 
-    private Date Valid;
+    private Date valid;
 
     @ManyToOne
     @JoinColumn(name = "event_id")

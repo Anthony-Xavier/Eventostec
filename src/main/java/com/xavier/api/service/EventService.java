@@ -27,13 +27,14 @@ public class EventService {
     private AmazonS3 amazonS3Client;
 
     @Autowired
-    EventRepository eventRepository;
+    private EventRepository eventRepository;
 
     public Event createEvent(EventRequestDto eventRequestDto) {
         String imgUrl = null;
 
-        if(eventRequestDto.image() != null) {
-            imgUrl = this.uploadImage(eventRequestDto.image());
+        MultipartFile image = eventRequestDto.image();
+        if (image != null && !image.isEmpty()) {
+            imgUrl = uploadImage(image);
         }
 
         Event newEvent = new Event();
@@ -44,29 +45,30 @@ public class EventService {
         newEvent.setImgUrl(imgUrl);
         newEvent.setRemote(eventRequestDto.remote());
 
-        eventRepository.save(newEvent);
-
-        return newEvent;
+        return eventRepository.save(newEvent);
     }
 
     private String uploadImage(MultipartFile multipartFile) {
         String fileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
+        File file = null;
         try {
-            File file = this.convertMultiPartToFile(multipartFile);
-            amazonS3Client.putObject(bucketName,fileName,file);
-            file.delete();
-            return amazonS3Client.getUrl(bucketName,fileName).toString();
-        }catch (Exception e){
-            System.out.println("Erro ao subir arquivo");
-            return "----ERRO-------";
+            file = convertMultiPartToFile(multipartFile);
+            amazonS3Client.putObject(bucketName, fileName, file);
+            return amazonS3Client.getUrl(bucketName, fileName).toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao fazer upload da imagem para o S3", e);
+        } finally {
+            if (file != null && file.exists()) {
+                file.delete();
+            }
         }
     }
 
     private File convertMultiPartToFile(MultipartFile multipartFile) throws IOException {
-        File convFive = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-        FileOutputStream fos = new FileOutputStream(convFive);
-        fos.write(multipartFile.getBytes());
-        fos.close();
-        return convFive;
+        File tempFile = File.createTempFile("upload-", Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+            fos.write(multipartFile.getBytes());
+        }
+        return tempFile;
     }
 }

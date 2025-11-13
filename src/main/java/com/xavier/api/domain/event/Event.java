@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Event {
+public class    Event {
 
     @Id
     @GeneratedValue

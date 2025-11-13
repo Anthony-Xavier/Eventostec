@@ -53,9 +53,9 @@ public class EventService {
         return eventRepository.save(newEvent);
     }
 
-    public List<EventResponseDto> getEvents(int page, int size) {
+    public List<EventResponseDto> getUpComingEvents(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Event> eventPage = eventRepository.findAll(pageable);
+        Page<Event> eventPage = eventRepository.findUpcomingEvents(new Date(),pageable);
 
         return eventPage
                 .map(event -> new EventResponseDto(

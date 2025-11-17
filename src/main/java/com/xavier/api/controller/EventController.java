@@ -5,10 +5,12 @@ import com.xavier.api.domain.event.EventRequestDto;
 import com.xavier.api.domain.event.EventResponseDto;
 import com.xavier.api.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -41,5 +43,17 @@ public class EventController {
     public ResponseEntity<List<EventResponseDto>> getUpComingEvents(@RequestParam (defaultValue = "0")int page, @RequestParam (defaultValue = "10") int size){
         List<EventResponseDto> allEvents = this.eventService.getUpComingEvents(page, size);
         return ResponseEntity.ok(allEvents);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<EventResponseDto>> getFilteredEvents(@RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "10") int size,
+                                                                    @RequestParam String title,
+                                                                    @RequestParam String city,
+                                                                    @RequestParam String uf,
+                                                                    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+                                                                    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
+        List<EventResponseDto> events = eventService.getFilteredEvets(page, size, title,city, uf, startDate, endDate);
+        return ResponseEntity.ok(events);
     }
 }

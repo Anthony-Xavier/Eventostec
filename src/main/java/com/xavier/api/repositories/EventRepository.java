@@ -13,7 +13,22 @@ import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<Event, UUID> {
 
-    @Query("SELECT e FROM Event e WHERE e.data >= :data")
+    @Query("SELECT e FROM Event e LEFT JOIN FETCH e.address a  WHERE e.data >= :data")
     Page<Event> findUpcomingEvents(@Param("data") Date data, Pageable pageable);
+
+
+    @Query("SELECT e FROM Event e " +
+            "JOIN e.address a " +
+            "WHERE (:city = '' OR a.city LIKE %:city%) " +
+            "AND (:uf = '' OR a.uf LIKE %:uf%) " +
+            "AND e.data BETWEEN :startDate AND :endDate")
+    Page<Event> findFilteredEvents(
+            @Param("city") String city,
+            @Param("uf") String uf,
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate,
+            Pageable pageable
+    );
+
 
 }

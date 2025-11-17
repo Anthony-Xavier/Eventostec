@@ -43,6 +43,7 @@ public class EventService {
         }
 
         Event newEvent = new Event();
+
         newEvent.setTitle(eventRequestDto.title());
         newEvent.setDescription(eventRequestDto.description());
         newEvent.setEventUrl(eventRequestDto.eventUrl());
@@ -50,8 +51,11 @@ public class EventService {
         newEvent.setImgUrl(imgUrl);
         newEvent.setRemote(eventRequestDto.remote());
 
+
+
         return eventRepository.save(newEvent);
     }
+
 
     public List<EventResponseDto> getUpComingEvents(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -63,8 +67,27 @@ public class EventService {
                         event.getTitle(),
                         event.getDescription(),
                         event.getData(),
-                       "",
-                       "",
+                        event.getAddress() != null? event.getAddress().getCity() :"",
+                        event.getAddress() != null? event.getAddress().getUf() :"",
+                        event.getRemote(),
+                        event.getEventUrl(),
+                        event.getImgUrl()
+                ))
+                .toList();
+    }
+
+    public List<EventResponseDto> getFilteredEvets(int page, int size, String title, String city, String uf,Date startDate, Date endDate) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> eventPage = eventRepository.findFilteredEvents(city, uf, startDate, endDate,pageable);
+
+        return eventPage
+                .map(event -> new EventResponseDto(
+                        event.getId(),
+                        event.getTitle(),
+                        event.getDescription(),
+                        event.getData(),
+                        event.getAddress() != null? event.getAddress().getCity() :"",
+                        event.getAddress() != null? event.getAddress().getUf() :"",
                         event.getRemote(),
                         event.getEventUrl(),
                         event.getImgUrl()
@@ -95,4 +118,6 @@ public class EventService {
         }
         return tempFile;
     }
+
+
 }

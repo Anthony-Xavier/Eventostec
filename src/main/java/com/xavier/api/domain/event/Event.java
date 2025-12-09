@@ -28,6 +28,8 @@ public class    Event {
     private String imgUrl;
     private String eventUrl;
     private Boolean remote;
+
+    @Column(nullable = false)
     private Date data;
 
     @OneToOne(mappedBy = "event", cascade = CascadeType.ALL)
